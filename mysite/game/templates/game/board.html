@@ -1,0 +1,190 @@
+<html>
+  <head>
+    <style>
+      h1 {
+      text-align:center;
+      font-size:36px;
+      }
+      h2 {
+      text-align:center;
+      font-size:28px;
+      }
+      h3 {
+      text-align:center;
+      font-size:18px;
+      font-color:black;
+      }
+      body {
+      background-color:#535331;
+      }
+      div.board {
+      width: 669px;
+      margin-left:auto;
+      margin-right:auto;
+      }
+      div.row {
+      float: right;
+      }
+      div.cell {
+      padding-top: 32px;
+      width: 221px;
+      height: 189px;
+      font-size: 144px;
+      text-align: center;
+      }
+      div.cell:hover {
+      box-shadow: 4px 4px 1px #444333;
+      transition-duration: 1s;
+      }
+      .left {
+      float: left;
+      border-right-style:solid;
+      border-width: 1px;
+      }
+      .center {
+      float: left;
+      }
+      .right {
+      float: left;
+      border-left-style:solid;
+      border-width: 1px;
+      }
+      .top {
+      border-bottom-style:solid;
+      border-width: 1px;
+      }
+      .middle {
+      }
+      .bottom {
+      border-top-style:solid;
+      border-width: 1px;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+          var click_handler = function (event) {
+              var that = this;
+              var ordinal_id = $(this).attr('id');
+              console.log(ordinal_id);
+              console.log("clicked!");
+
+              var callback_handler = function (item) {
+                  $('#prompt').html(item['status']);
+                  $('#' + item['player_move']).html('O');
+                  $('#' + item['ai_move']).html('X');
+
+                  if ( item['status'] === 'Game Over' ) {
+                      $('#reload').show();
+                      $('#prompt').html(item['status']);
+                      $('.cell').each(function (index, value) {
+                           $(value).unbind('click');
+                      });
+                  }
+              }
+
+              $.ajax({
+                  type: 'post',
+                  url: "{% url 'make_move' %}",
+                  dataType: 'json',
+                  data: { ordinal: ordinal_id},
+                  success: callback_handler,
+                  failure: function(data){
+                      alert('Got an error');
+                  }
+              });
+              return false;
+          }
+
+          var lure_handler = function (event) {
+              $('#lure').hide();
+              $('#prompt').show();
+              $(".cell").click(click_handler);
+              var lure_callback_handler = function (item) {
+                  $('#prompt').html(item['status']);
+                  $('#' + item['ai_move']).html('X');
+              }
+
+              $.ajax({
+                  type: 'post',
+                  url: "{% url 'lure' %}",
+                  dataType: 'json',
+                  data: { ordinal: "1,1"},
+                  success: lure_callback_handler,
+                  failure: function(data){
+                      alert('Got an error');
+                  }
+              });
+              return false;
+          }
+
+          $('#reload').hide();
+          $('#prompt').hide();
+          $('#lure').click(lure_handler);
+      });
+    </script>
+  </head>
+  <body>
+    <!-- The div blocks below will define the tic tac toe board from
+      top to bottom.-->
+    <div class="board">
+      <h1>How About A Game Of Tic Tac Toe?!</h1>
+      <h3 id="prompt">Your Move!</h3>
+      <h3 id="reload"><a href="{% url 'home' %}">Load A New Game</a></h3>
+      <h3 id="lure"><a href="{% url 'home' %}">Yes</a></h3>
+      <form>
+	<div class="row">
+	  <div id="0,2" class="cell left top">
+	    <div id="02" class="content">
+	      {{ board.0_2 }}
+	    </div>
+	  </div>
+	  <div id="1,2" class="cell center top">
+	    <div id="12" 2class="content">
+	      {{ board.1_2 }}
+	    </div>
+	  </div>
+	  <div id="2,2" class="cell right top">
+	    <div id="22" class="content">
+	      {{ board.2_2 }}
+	    </div>
+	  </div>
+	</div>
+	<div class="row">
+	  <div id="0,1" class="cell left middle">
+	    <div id="01" class="content">
+	      {{ board.0_1 }}
+	    </div>
+	  </div>
+	  <div id="1,1" class="cell center middle">
+	    <div id="11" class="content">
+	      {{ board.1_1 }}
+	    </div>
+	  </div>
+	  <div id="2,1" class="cell right middle">
+	    <div id="21" class="content">
+	      {{ board.2_1 }}
+	    </div>
+	  </div>
+	</div>
+	<div class="row">
+	  <div id="0,0" class="cell left bottom">
+	    <div id="00" class="content">
+	      {{ board.0_0 }}
+	    </div>
+	  </div>
+	  <div id="1,0" class="cell center bottom">
+	    <div id="10" class="content">
+	      {{ board.1_0 }}
+	    </div>
+	  </div>
+	  <div id="2,0" class="cell right bottom">
+	    <div id="20" class="content">
+	      {{ board.2_0 }}
+	    </div>
+	  </div>
+	</div>
+      </form>
+    </div>
+  </body>
+</html>

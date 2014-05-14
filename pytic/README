@@ -1,0 +1,18 @@
+Intro
+=====
+The package contains all of the types and logic for the Tic Tac Toe game. My personal
+strategy with Tic Tac Toe is to block my opponents moves waiting for them to make a
+mistake.
+
+Notes
+=====
+* Just because the AI never loses doesn't mean it wins.
+* Each straight line group of winning marks can be thought of as a vector.
+* Analysis, the AI has to place it's move in the same vector as the opponent, But now
+  to tell what vector?.
+    * Opponent's random first move.
+    * AI places move in one of 2-4 vectors that will allows the opponent to win.
+    * Opponent makes second move, either to block AI or chosing a different vector.
+    * AI places next move to block opponent as first priority or make move in a
+      success vector basec off of first move.
+    * (repeat)

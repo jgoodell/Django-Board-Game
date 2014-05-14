@@ -1,0 +1,48 @@
+Introduction
+============
+The application is split into two parts. There is a python package named
+'pytic' where the Tic Tac Toe game logic lives, and a 'mysite' django
+app that uses the 'pytic' package to create the web applicaton Tic Tac
+Toe game. Both of these code bases will need to be setup properly before
+the web application will work.
+
+Environment
+===========
+I suggest using virtualenv to create an isolated enviroment to install and
+run this application. There is a file 'requirements.pip' that contains all
+the dependencies you will need, with their specific versions, and you can
+install these dependencies by running
+
+    pip install -r requirements.pip
+
+from the command line. You might need to use 'sudo' if you are installing
+these dependencies to global site-packages.
+
+pytic
+=============
+To install change directories into the pytic package run
+
+    python setup.py install
+
+from the command line. You might need to use 'sudo' if you are installing
+this package to your global site-packages. This command will install the
+pytic package.
+
+Django App
+==========
+To run the django application change directories to the project root and
+run
+
+    python manage.py runserver 8080
+
+from the command line. You may need to change 8080 to a different port
+if another application is running using 8080. You will receive an error
+message if that is the case.
+
+Wrap Up
+=======
+After following all the instructions you should be able to go to 
+
+     http://localhost:8080
+
+and see the Tic Tac Toe game running in your browser. Enjoy!!
